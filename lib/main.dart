@@ -36,7 +36,14 @@ class PlayerData {
 late List <PlayerData> playerDataList;
 
 void main() async {
-  var resp = await http.get(Uri.https('localhost:8080', '/players'));
+  var resp = await http.get(
+    Uri.https('localhost:8080', '/players'),
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+      'Accept': '*/*'
+    }
+  );
   playerDataList = (json.decode(resp.body) as List).map((i) => 
     PlayerData.fromJson(i)).toList();
   runApp(
