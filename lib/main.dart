@@ -36,7 +36,7 @@ class PlayerData {
 late List <PlayerData> playerDataList;
 
 void main() async {
-  var resp = await http.get(Uri.https('nutone.okudai.dev', '/players'));
+  var resp = await http.get(Uri.https('localhost:8080', '/players'));
   playerDataList = (json.decode(resp.body) as List).map((i) => 
     PlayerData.fromJson(i)).toList();
   runApp(
