@@ -37,7 +37,7 @@ late List <PlayerData> playerDataList;
 
 void main() async {
   var resp = await http.get(
-    Uri.https('localhost:8080', '/players'),
+    Uri.https('nutone.okudai.dev', '/players'),
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
