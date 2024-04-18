@@ -40,6 +40,7 @@ void main() async {
     Uri.https('nutone.okudai.dev', '/players'),
     headers: {
       "Access-Control-Allow-Origin": "*",
+      "Access-Control-Request-Method": "GET",
       'Content-Type': 'application/json',
       'Accept': '*/*'
     }
