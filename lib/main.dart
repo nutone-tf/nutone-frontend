@@ -92,9 +92,9 @@ class _PlayerDataTableState extends State<PlayerDataTable> {
           numItems,
           (int index) => DataRow(
             cells: <DataCell>[
-              DataCell(Text('$playerDataList[index].name')),
-              DataCell(Text('$playerDataList[index].kills')),
-              DataCell(Text('$playerDataList[index].deaths')),
+              DataCell(Text(playerDataList[index].name.toString())),
+              DataCell(Text(playerDataList[index].kills.toString())),
+              DataCell(Text(playerDataList[index].deaths.toString())),
             ]
           )
         )
