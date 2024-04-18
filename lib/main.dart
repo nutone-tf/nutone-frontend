@@ -37,7 +37,12 @@ late List <PlayerData> playerDataList;
 
 void main() async {
   var resp = await http.get(
-    Uri.https('nutone.okudai.dev', '/players')
+    Uri.https('nutone.okudai.dev', '/players'),
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      'Content-Type': 'application/json',
+      'Accept': '*/*'
+    }
   );
   playerDataList = (json.decode(resp.body) as List).map((i) => 
     PlayerData.fromJson(i)).toList();
