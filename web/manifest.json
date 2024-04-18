@@ -1,5 +1,5 @@
 {
-    "name": "nutone_frontend",
+    "name": "Nutone API frontend",
     "short_name": "nutone_frontend",
     "start_url": ".",
     "display": "standalone",
