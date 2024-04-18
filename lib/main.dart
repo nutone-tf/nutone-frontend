@@ -19,9 +19,9 @@ class PlayerData {
     return switch (json)
     {
       {
-      'name': int deaths,
+      'deaths': int deaths,
       'kills': int kills,
-      'deaths': String name,
+      'name': String name,
       } =>
         PlayerData(
           name: name,
