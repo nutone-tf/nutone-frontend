@@ -34,6 +34,7 @@ class PlayerData {
 }
 
 late List <PlayerData> playerDataList;
+final PlayerDataSource dataSource = PlayerDataSource();
 
 void main() async {
   var resp = await http.get(
@@ -70,13 +71,34 @@ class PlayerDataTable extends StatefulWidget {
   State<PlayerDataTable> createState() => _PlayerDataTableState();
 }
 
+class PlayerDataSource extends DataTableSource {
+  @override
+  int get rowCount => playerDataList.length;
+
+  @override
+  DataRow? getRow(int index) {
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(Text(playerDataList[index].name.toString())),
+        DataCell(Text(playerDataList[index].kills.toString())),
+        DataCell(Text(playerDataList[index].deaths.toString())),
+      ]
+    );
+  }
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get selectedRowCount => 0;
+}
+
 class _PlayerDataTableState extends State<PlayerDataTable> {
   int numItems = playerDataList.length;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: DataTable(
+      child: PaginatedDataTable(
         columns: const<DataColumn>[
           DataColumn(
             label: Text('Name'),
@@ -88,16 +110,7 @@ class _PlayerDataTableState extends State<PlayerDataTable> {
             label: Text('Deaths'),
           ),
         ],
-        rows: List<DataRow>.generate(
-          numItems,
-          (int index) => DataRow(
-            cells: <DataCell>[
-              DataCell(Text(playerDataList[index].name.toString())),
-              DataCell(Text(playerDataList[index].kills.toString())),
-              DataCell(Text(playerDataList[index].deaths.toString())),
-            ]
-          )
-        )
+        source: dataSource,
       )
     );
   }
