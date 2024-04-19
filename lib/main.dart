@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
-
 class PlayerData {
   final String name;
   final int kills;
@@ -43,9 +41,17 @@ void main() async {
   playerDataList = (json.decode(resp.body) as List).map((i) => 
     PlayerData.fromJson(i)).toList();
   runApp(
-    const MaterialApp(
+    MaterialApp(
       title: 'Nutone',
-      home: Nutone(),
+      theme: ThemeData(
+        useMaterial3: true,
+
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: const Nutone(),
     ),
   );
 }
