@@ -57,7 +57,7 @@ class Nutone extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Text('Nutone API'),
+        title: const Text('Nutone API'),
         ),
       body: const PlayerDataTable()
       );
