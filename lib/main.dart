@@ -35,6 +35,7 @@ late List <PlayerData> playerDataList;
 final PlayerDataSource dataSource = PlayerDataSource();
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var resp = await http.get(
     Uri.https('nutone.okudai.dev', '/players')
   );
