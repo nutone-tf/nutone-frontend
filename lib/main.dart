@@ -32,6 +32,7 @@ class PlayerData {
 }
 
 late List <PlayerData> playerDataList;
+String? filter;
 final PlayerDataSource dataSource = PlayerDataSource();
 
 void main() async {
@@ -65,6 +66,35 @@ class Nutone extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nutone API'),
+        actions: <Widget> [SearchAnchor(
+          builder: (BuildContext context, SearchController controller) {
+            return SearchBar(
+            controller: controller,
+            padding: const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
+            onTap: () {
+              controller.openView();
+            },
+            onChanged: (_) {
+              controller.openView();
+            },
+            leading: const Icon(Icons.search)
+            );
+          },
+          suggestionsBuilder: (BuildContext context, SearchController controller) {
+            List<PlayerData> playerDataListFiltered = playerDataList.where((player) => player.name.contains(controller.text)).toList();
+            return List<ListTile>.generate(playerDataListFiltered.length, (int index) {
+              final String item = playerDataListFiltered[index].name;
+              return ListTile(
+                title: Text(item),
+                onTap: () {
+                  filter == controller.text;
+                  controller.closeView(item);
+                }
+              );
+            });
+          }
+        ),
+        ]
         ),
       body: const PlayerDataTable()
       );
@@ -80,17 +110,28 @@ class PlayerDataTable extends StatefulWidget {
 
 class PlayerDataSource extends DataTableSource {
   @override
-  int get rowCount => playerDataList.length;
+  int get rowCount => filter == null ? playerDataList.length : playerDataList.where((player) => player.name.contains(filter!)).toList().length;
 
   @override
   DataRow? getRow(int index) {
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(Text(playerDataList[index].name.toString())),
-        DataCell(Text(playerDataList[index].kills.toString())),
-        DataCell(Text(playerDataList[index].deaths.toString())),
-      ]
-    );
+    if (filter == null) {
+      return DataRow(
+        cells: <DataCell>[
+          DataCell(Text(playerDataList[index].name.toString())),
+          DataCell(Text(playerDataList[index].kills.toString())),
+          DataCell(Text(playerDataList[index].deaths.toString())),
+        ]
+      );
+    } else {
+      return DataRow(
+        cells: <DataCell>[
+          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].name.toString())),
+          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].kills.toString())),
+          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].deaths.toString())),
+        ]
+      );
+    }
+    
   }
   @override
   bool get isRowCountApproximate => false;
@@ -121,4 +162,5 @@ class _PlayerDataTableState extends State<PlayerDataTable> {
       )
     );
   }
+
 }
