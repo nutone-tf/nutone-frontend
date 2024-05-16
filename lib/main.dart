@@ -31,8 +31,8 @@ class PlayerData {
   }
 }
 
-List <PlayerData> pData = [];
-List <PlayerData> sData = [];
+List <PlayerData> rData = [];
+List <PlayerData> fData = [];
 String? filter = '';
 final PlayerDataSource dataSource = PlayerDataSource();
 
@@ -84,15 +84,15 @@ class PlayerDataTable extends StatefulWidget {
 
 class PlayerDataSource extends DataTableSource {
   @override
-  int get rowCount => sData.length;
+  int get rowCount => fData.length;
 
   @override
   DataRow? getRow(int index) {
       return DataRow(
         cells: <DataCell>[
-          DataCell(Text(sData[index].name.toString())),
-          DataCell(Text(sData[index].kills.toString())),
-          DataCell(Text(sData[index].deaths.toString())),
+          DataCell(Text(fData[index].name.toString())),
+          DataCell(Text(fData[index].kills.toString())),
+          DataCell(Text(fData[index].deaths.toString())),
         ]
       );
   }
@@ -112,15 +112,15 @@ class PlayerDataSource extends DataTableSource {
     var resp = await http.get(
       Uri.https('nutone.okudai.dev', '/players')
     );
-    pData = (json.decode(resp.body) as List).map((i) => 
+    rData = (json.decode(resp.body) as List).map((i) => 
       PlayerData.fromJson(i)).toList();
-    sData = pData.where((player) => player.name.contains(filter!)).toList();
+    fData = rData.where((player) => player.name.contains(filter!)).toList();
     notifyListeners();
   }
 }
 
 class _PlayerDataTableState extends State<PlayerDataTable> {
-  int numItems = pData.length;
+  int numItems = rData.length;
 
   @override
   Widget build(BuildContext context) {
