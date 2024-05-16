@@ -32,7 +32,7 @@ class PlayerData {
 }
 
 late List <PlayerData> playerDataList;
-String? filter;
+String? filter = '';
 final PlayerDataSource dataSource = PlayerDataSource();
 
 void main() async {
@@ -47,54 +47,32 @@ void main() async {
       title: 'Nutone',
       theme: ThemeData(
         useMaterial3: true,
-
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
           brightness: Brightness.dark,
         ),
       ),
-      home: const Nutone(),
+      home: Nutone(),
     ),
   );
 }
 
 class Nutone extends StatelessWidget {
-  const Nutone({super.key});
+  Nutone({super.key});
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    textController.addListener(() {dataSource.notify(textController.text);});
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nutone API'),
-        actions: <Widget> [SearchAnchor(
-          builder: (BuildContext context, SearchController controller) {
-            return SearchBar(
-            controller: controller,
+        actions: <Widget> [SearchBar(
+            controller: textController,
             padding: const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-            onTap: () {
-              controller.openView();
-            },
-            onChanged: (_) {
-              controller.openView();
-            },
             leading: const Icon(Icons.search)
-            );
-          },
-          suggestionsBuilder: (BuildContext context, SearchController controller) {
-            List<PlayerData> playerDataListFiltered = playerDataList.where((player) => player.name.contains(controller.text)).toList();
-            return List<ListTile>.generate(playerDataListFiltered.length, (int index) {
-              final String item = playerDataListFiltered[index].name;
-              return ListTile(
-                title: Text(item),
-                onTap: () {
-                  filter == controller.text;
-                  controller.closeView(item);
-                }
-              );
-            });
-          }
-        ),
-        ]
+            )
+          ]
         ),
       body: const PlayerDataTable()
       );
@@ -114,15 +92,6 @@ class PlayerDataSource extends DataTableSource {
 
   @override
   DataRow? getRow(int index) {
-    if (filter == null) {
-      return DataRow(
-        cells: <DataCell>[
-          DataCell(Text(playerDataList[index].name.toString())),
-          DataCell(Text(playerDataList[index].kills.toString())),
-          DataCell(Text(playerDataList[index].deaths.toString())),
-        ]
-      );
-    } else {
       return DataRow(
         cells: <DataCell>[
           DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].name.toString())),
@@ -130,14 +99,18 @@ class PlayerDataSource extends DataTableSource {
           DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].deaths.toString())),
         ]
       );
-    }
-    
   }
+
   @override
   bool get isRowCountApproximate => false;
 
   @override
   int get selectedRowCount => 0;
+
+  void notify(String text) {
+    filter = text;
+    notifyListeners();
+  }
 }
 
 class _PlayerDataTableState extends State<PlayerDataTable> {
