@@ -31,17 +31,13 @@ class PlayerData {
   }
 }
 
-late List <PlayerData> playerDataList;
+List <PlayerData> pData = [];
+List <PlayerData> sData = [];
 String? filter = '';
 final PlayerDataSource dataSource = PlayerDataSource();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  var resp = await http.get(
-    Uri.https('nutone.okudai.dev', '/players')
-  );
-  playerDataList = (json.decode(resp.body) as List).map((i) => 
-    PlayerData.fromJson(i)).toList();
+  dataSource.get();
   runApp(
     MaterialApp(
       title: 'Nutone',
@@ -88,15 +84,15 @@ class PlayerDataTable extends StatefulWidget {
 
 class PlayerDataSource extends DataTableSource {
   @override
-  int get rowCount => playerDataList.where((player) => player.name.contains(filter!)).toList().length;
+  int get rowCount => sData.length;
 
   @override
   DataRow? getRow(int index) {
       return DataRow(
         cells: <DataCell>[
-          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].name.toString())),
-          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].kills.toString())),
-          DataCell(Text(playerDataList.where((player) => player.name.contains(filter!)).toList()[index].deaths.toString())),
+          DataCell(Text(sData[index].name.toString())),
+          DataCell(Text(sData[index].kills.toString())),
+          DataCell(Text(sData[index].deaths.toString())),
         ]
       );
   }
@@ -111,10 +107,20 @@ class PlayerDataSource extends DataTableSource {
     filter = text;
     notifyListeners();
   }
+
+  void get() async {
+    var resp = await http.get(
+      Uri.https('nutone.okudai.dev', '/players')
+    );
+    pData = (json.decode(resp.body) as List).map((i) => 
+      PlayerData.fromJson(i)).toList();
+    sData = pData.where((player) => player.name.contains(filter!)).toList();
+    notifyListeners();
+  }
 }
 
 class _PlayerDataTableState extends State<PlayerDataTable> {
-  int numItems = playerDataList.length;
+  int numItems = pData.length;
 
   @override
   Widget build(BuildContext context) {
