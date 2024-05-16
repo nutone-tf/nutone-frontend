@@ -88,7 +88,7 @@ class PlayerDataTable extends StatefulWidget {
 
 class PlayerDataSource extends DataTableSource {
   @override
-  int get rowCount => filter == null ? playerDataList.length : playerDataList.where((player) => player.name.contains(filter!)).toList().length;
+  int get rowCount => playerDataList.where((player) => player.name.contains(filter!)).toList().length;
 
   @override
   DataRow? getRow(int index) {
