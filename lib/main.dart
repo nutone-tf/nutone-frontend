@@ -105,6 +105,7 @@ class PlayerDataSource extends DataTableSource {
 
   void notify(String text) {
     filter = text;
+    fData = rData.where((player) => player.name.contains(filter!)).toList();
     notifyListeners();
   }
 
