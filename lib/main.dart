@@ -1,38 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'models/player.dart' as player;
 
-class PlayerData {
-  final String name;
-  final int kills;
-  final int deaths;
-
-  const PlayerData({
-    required this.name,
-    required this.kills,
-    required this.deaths,
-  });
-
-  factory PlayerData.fromJson(Map<String, dynamic> json) {
-    return switch (json)
-    {
-      {
-      'deaths': int deaths,
-      'kills': int kills,
-      'name': String name,
-      } =>
-        PlayerData(
-          name: name,
-          kills: kills,
-          deaths: deaths,
-      ),
-      Map<String, dynamic>() => throw UnimplementedError()
-    };
-  }
-}
-
-List <PlayerData> rData = [];
-List <PlayerData> fData = [];
+List <player.Data> rData = [];
+List <player.Data> fData = [];
 String? filter = '';
 final PlayerDataSource dataSource = PlayerDataSource();
 
@@ -114,7 +86,7 @@ class PlayerDataSource extends DataTableSource {
       Uri.https('nutone.okudai.dev', '/players')
     );
     rData = (json.decode(resp.body) as List).map((i) => 
-      PlayerData.fromJson(i)).toList();
+      player.Data.fromJson(i)).toList();
     fData = rData.where((player) => player.name.contains(filter!)).toList();
     notifyListeners();
   }
