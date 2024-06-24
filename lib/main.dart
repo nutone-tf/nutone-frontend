@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:nutone_frontend/widgets/header.dart';
 import 'dart:convert';
 import 'models/player.dart' as player;
+
 
 List <player.Data> rData = [];
 List <player.Data> fData = [];
@@ -33,15 +35,7 @@ class Nutone extends StatelessWidget {
   Widget build(BuildContext context) {
     textController.addListener(() {dataSource.notify(textController.text);});
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nutone API'),
-        actions: <Widget> [SearchBar(
-            controller: textController,
-            padding: const MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
-            leading: const Icon(Icons.search)
-            )
-          ]
-        ),
+      appBar: Header(textController: textController),
       body: const PlayerDataTable()
       );
   }
