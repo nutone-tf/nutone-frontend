@@ -1,0 +1,78 @@
+@import url("https://iosevka-webfonts.github.io/iosevkatermss13/IosevkaTermSS13.css");
+
+:root {
+    font-family: "Iosevka Term SS13 Web";
+    color-scheme: dark light;
+}
+
+html {
+    height: 100%
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: light-dark(#ebdbb2, #32302f);
+    color: light-dark(#32302f, #ebdbb2);
+}
+
+button, input {
+    color: light-dark(#32302f, #ebdbb2);
+    background: light-dark(#fbf1c7, #3c3836);
+    border: 1px solid light-dark(#d5c4a1, #282828);
+}
+
+button:hover {
+    color: light-dark(#ebdbb2, #32302f);
+    background: light-dark(#3c3836, #fbf1c7);
+    border: 1px solid light-dark(#d5c4a1, #282828);
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-self: center;
+    justify-content: center;
+    width: 35%;
+}
+
+#top-bar {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid light-dark(#32302f, #ebdbb2);
+}
+
+#bottom-bar {
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid light-dark(#32302f, #ebdbb2);
+}
+
+#info, #filters, #controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 5px;
+}
+
+#page-controls {
+    display: flex;
+    flex-direction: row;
+}
+
+#pages {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#data {
+    background-color: light-dark(#d5c4a1, #282828);
+}
+
+tr:nth-child(odd) {
+    background-color: light-dark(#fbf1c7, #3c3836) 
+}

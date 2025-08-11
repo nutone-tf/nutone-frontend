@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nutone API</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="filters.js"></script>
+    </head>
+    <body>
+        <div id="top-bar">nutone.okudai.dev</div>
+        <div id="content">
+            <div id="info">
+                <div id="results">0 results</div>
+                <div id="page-controls">
+                    <button id="prev">Previous</button>
+                    <div id="pages">Page 1 out of 1</div>
+                    <button id="next">Next</button>
+                </div>
+            </div>
+            <div id="controls">
+                <div id="filters">
+                    <input list="weapons-list" name="weapons" id="weapons" placeholder="Weapon">
+                    <datalist id="weapons-list"></datalist>
+                    <input list="servers-list" name="servers" id="servers" placeholder="Server">
+                    <datalist id="servers-list"></datalist>
+                </div>
+                <div>
+                    <button id="clear">Clear</button>
+                    <button id="search">Search</button>
+                </div>
+            </div>
+            <table id="data"></table>
+        </div>
+        <div id="bottom-bar">made with HTML, CSS and JQuery | okudai.dev 2025</div>
+        <script>
+            var page = 1
+            var table = $("#data")
+            var results = $("#results")
+            var pages = $("#pages")
+            var weapons = $("#weapons")
+            var servers = $("#servers")
+            var weaponsList = $("#weapons-list")
+            var serversList = $("#servers-list")
+
+            var filters = {
+                "weapon": "",
+                "server": "",
+            }
+            function loadFilters() {
+                weaponsList.empty()
+                serversList.empty()
+                $.each(weapon_data, function(id, weapon){
+                    weaponsList.append("<option label=\""+weapon+"\" value=\""+id+"\"></option>")
+                })
+                $.getJSON("https://nutone.okudai.dev/v1/servers", function(result){
+                    $.each(result.servers, function(id, server) {
+                        serversList.append("<option label=\""+server.server_name+"\" value=\""+id+"\"></option>")
+                    })
+                })
+                
+            }
+            function getData() {
+                $.getJSON("https://nutone.okudai.dev/v1/players?page=" + page + (filters.weapon == "" ? "" : "&weapon=" + filters.weapon) + (filters.server == "" ? "" : "&server=" + filters.server), function(result){
+                    results.empty()
+                    results.append(result.info.allResults + " results")
+                    page = result.info.currentPage
+                    pages.empty()
+                    pages.append("Page " + result.info.currentPage + " out of " + result.info.maxPages)
+                    table.empty()
+                    table.append("<tr><td><b>Username</b></td><td><b>Kills</b></td><td><b>"+ (filters.weapon == "" ? "Deaths" : "Average kill distance") +"</b></td></tr>")
+                    $.each(result.players, function(uid, player) {
+                        table.append("<tr><td>"+player.name+"</td><td>"+player.kills+"</td><td>"+ (filters.weapon == "" ? player.deaths : player.avg_distance) +"</td></tr>")
+                    })
+                })
+            }
+            $(document).ready(function(){
+                weapons.val("")
+                filters.weapon = ""
+                servers.val("")
+                filters.server = ""
+                loadFilters()
+                getData()
+            })
+            $("#prev").on("click", function(){
+                page -= 1
+                getData()
+            })
+            $("#next").on("click", function(){
+                page += 1
+                getData()
+            })
+            $("#clear").on("click", function () {
+                weapons.val("")
+                filters.weapon = ""
+                servers.val("")
+                filters.server = ""
+                getData()
+            })
+            $("#search").on("click", function(){
+                page = 1
+                filters.weapon = weapons.val()
+                filters.server = servers.val()
+                getData()
+            })
+        </script>
+    </body>
+</html>
