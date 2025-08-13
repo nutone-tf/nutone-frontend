@@ -81,3 +81,7 @@ button:hover {
 tr:nth-child(odd) {
     background-color: light-dark(#fbf1c7, #3c3836) 
 }
+
+.sep {
+    padding-left: 5px;
+}
