@@ -5,6 +5,10 @@
     color-scheme: dark light;
 }
 
+::placeholder {
+    font-family: "Iosevka Term SS13 Web";
+}
+
 html {
     height: 100%
 }
@@ -20,6 +24,7 @@ body {
 }
 
 button, input {
+    font-family: "Iosevka Term SS13 Web";
     color: light-dark(#32302f, #ebdbb2);
     background: light-dark(#fbf1c7, #3c3836);
     border: 1px solid light-dark(#d5c4a1, #282828);
