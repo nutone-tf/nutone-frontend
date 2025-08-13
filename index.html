@@ -41,6 +41,7 @@
             var servers = $("#servers")
             var weaponsList = $("#weapons-list")
             var serversList = $("#servers-list")
+            var resultArray = []
 
             var filters = {
                 "weapon": "",
@@ -61,6 +62,7 @@
             }
             function getData() {
                 $.getJSON("https://nutone.okudai.dev/v1/players?page=" + page + (filters.weapon == "" ? "" : "&weapon=" + filters.weapon) + (filters.server == "" ? "" : "&server=" + filters.server), function(result){
+                    resultArray.length = 0
                     results.empty()
                     results.append(result.info.allResults + " results")
                     page = result.info.currentPage
@@ -68,7 +70,12 @@
                     pages.append("Page " + result.info.currentPage + " out of " + result.info.maxPages)
                     table.empty()
                     table.append("<tr><td><b>Username</b></td><td><b>Kills</b></td><td><b>"+ (filters.weapon == "" ? "Deaths" : "Average kill distance") +"</b></td></tr>")
+                    
                     $.each(result.players, function(uid, player) {
+                        resultArray.push(result.players[uid])
+                    })
+                    resultArray.sort(function(a, b) {return b.kills - a.kills})
+                    $.each(resultArray, function(index, player) {
                         table.append("<tr><td>"+player.name+"</td><td>"+player.kills+"</td><td>"+ (filters.weapon == "" ? player.deaths : player.avg_distance) +"</td></tr>")
                     })
                 })
