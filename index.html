@@ -77,7 +77,7 @@
                     })
                     resultArray.sort(function(a, b) {return b.kills - a.kills})
                     $.each(resultArray, function(index, player) {
-                        table.append("<tr><td>"+player.name+"</td><td>"+player.kills+"</td><td>"+ (filters.weapon == "" ? player.deaths : ((player.avg_distance * 1.904).toFixed(2) + "m")) +"</td></tr>")
+                        table.append("<tr><td>"+player.name+"</td><td>"+player.kills+"</td><td>"+ (filters.weapon == "" ? player.deaths : ((player.avg_distance * 0.01904).toFixed(2) + "m")) +"</td></tr>")
                     })
                 })
             }
