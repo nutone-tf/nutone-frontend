@@ -61,6 +61,12 @@
                 })
                 
             }
+            function getDataForNewFilters() {
+                page = 1
+                filters.weapon = weapons.val()
+                filters.server = servers.val()
+                getData()
+            }
             function getData() {
                 $.getJSON("https://nutone.okudai.dev/v1/players?page=" + page + (filters.weapon == "" ? "" : "&weapon=" + filters.weapon) + (filters.server == "" ? "" : "&server=" + filters.server), function(result){
                     resultArray.length = 0
@@ -89,6 +95,22 @@
                 loadFilters()
                 getData()
             })
+            $("#weapons").on("change", function(){
+                getDataForNewFilters()
+            })
+            $("#servers").on("change", function(){
+                getDataForNewFilters()
+            })
+            $("#weapons").on("keypress", function(e){
+                if (e.which == 13) {
+                    getDataForNewFilters()
+                }
+            })
+            $("#servers").on("keypress", function(e){
+                if (e.which == 13) {
+                    getDataForNewFilters()
+                }
+            })
             $("#prev").on("click", function(){
                 page -= 1
                 getData()
@@ -105,10 +127,7 @@
                 getData()
             })
             $("#search").on("click", function(){
-                page = 1
-                filters.weapon = weapons.val()
-                filters.server = servers.val()
-                getData()
+                getDataForNewFilters()
             })
         </script>
     </body>
